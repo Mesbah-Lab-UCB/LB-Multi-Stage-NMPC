@@ -37,7 +37,7 @@ EWx = E*Wx;
 if worstCase==0
     Cinf_next = PolyUnion(Cinf).outerApprox() - EWx;
 else
-    Cinf_next = Cinf_ob-EWx
+    Cinf_next = Cinf_ob-EWx;
 end
 Cinf_next.computeVRep();
 % Cinf_next = PolyUnion(Cinf_next).outerApprox();

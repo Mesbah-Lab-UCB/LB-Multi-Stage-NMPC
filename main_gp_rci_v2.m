@@ -38,7 +38,7 @@ X = Polyhedron('lb',x_min,'ub',x_max);
 U = Polyhedron('lb',u_min,'ub',u_max);
 
 % number of boxes
-Nbox = 5;
+Nbox = 3;
 
 
 %% Learn Guassian process (GP) model
@@ -183,7 +183,7 @@ Usim = zeros(nu,Nsim);
 Wsim = zeros(nw,Nsim);
 What = zeros(nw,Nsim);
 Xsim(:,1) = Cinf(3).V(end,:)';
-%{
+
 for k = 1:Nsim
     % print start
     tic

@@ -19,11 +19,8 @@ constraints = [];
 objective = 0;
 
 
-% W = PolyUnion(Delta).outerApprox();
-
-
 % find the set W(x) for current state
-index = Delta_X1.contains(x(1));
+index = Delta_X1.contains(min(10, x(1)));
 index = find(index == 1);
 
 % Project onto the w-axis. If Xsim is contained in more than one boxes,
@@ -49,9 +46,6 @@ Cinf_next = (setMinus(X,(EWx)))\((X\Cinf) + (-EWx));
 npoly = length(Cinf_next);
 
 
-ybin = binvar(npoly,1);
-ybinNext = binvar(npoly,1);
-
 %ismember constraint
 constraints = [constraints, ismember(xnext, Cinf_next)];
 % constraints = [constraints, ismember(xcurrent, Cinf)];
@@ -61,7 +55,7 @@ for l=1:length(npoly)
     constraints = [constraints, Cinf(l).A*xcurrent <= Cinf(l).b+M*(1-ybin(l))];
 end
 %}
-constraints = [constraints, U.A*uproject <= U.b, sum(ybin)==1, sum(ybinNext)==1];
+constraints = [constraints, U.A*uproject <= U.b];
 objective = objective + (u - uproject)'*(u - uproject);
 
 % Add constraints on the explicit variable to bound the size of the mp map
@@ -72,6 +66,9 @@ objective = objective + (u - uproject)'*(u - uproject);
 ops = sdpsettings('verbose',1);
 optimize(constraints,objective,ops);
 uProj = value(uproject);
+%%
+
+
 
 end
 

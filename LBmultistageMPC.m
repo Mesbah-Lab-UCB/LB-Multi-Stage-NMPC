@@ -27,7 +27,7 @@ OFswitch = 0;            % Offset-free approach on/off
 TrainOnly = 0;           % Carry out training only (when validating/testing)
 saveSwitch = 0;          % Save outputs on/off
 worstCase = 0;
-useProj = 1;
+useProj = 0;
 
 
 
@@ -115,11 +115,13 @@ end
 
 
 %% Project into maximal robust control invariant set
+%{
 if useProj==1
      [explicit_controller, mptsol,diagn,Z,Valuefcn,Optimizer] = CinfProjection_ob(X, U, Cinf, Cinf_ob, Delta, Delta_X1, sys, worstCase);
      save('uexp.mat', 'explicit_controller')
 %     load('uexp')
 end
+%}
 
 
 
@@ -142,7 +144,7 @@ nx = size(Q,1);
 nu = size(R,1);
 
 Np = 4;                             % Prediction horizon
-N = 40;                             % Simulation horizon
+N = 20;                             % Simulation horizon
 N_robust = 2;                       % Robust horizon for multistage MPC
 
 % Initial point
@@ -150,7 +152,7 @@ yi = [4;0];
 
 % Set point(s) and time(s) at which the reference changes
 ysp1 = [10;0];
-tChange = 25;
+tChange = 10;
 ysp2 = [0;0];
 tChange2 = 9999;
 ysp3 = [0;0];
@@ -583,7 +585,10 @@ for k = 1:N
     
     % specify to use the projection or just the DNN
     if useProj == 1
-        uopt(:,1) = explicit_controller([xhati;uopt(:,1)]);
+        fprintf('simulation step %g / %g...', k, N)
+%       uopt(:,1) = explicit_controller([xhati;uopt(:,1)]);
+        uopt(:,1) = CinfProjection(xhati, uopt(:,1), X, U, Cinf, Delta, Delta_X1, sys);
+        fprintf('took %g seconds\n', toc)
     else
         uopt(:,1) = uopt(:,1);
     end
@@ -629,9 +634,9 @@ for k = 1:N
 end
 %%
 
-Tend = toc;
-disp(['Total time = ', num2str(Tend)]);
-disp(['Average time = ', num2str(Tend/N)]);
+% Tend = toc;
+% disp(['Total time = ', num2str(Tend)]);
+% disp(['Average time = ', num2str(Tend/N)]);
 
 figure(2)
 subplot(2,1,1)
@@ -660,7 +665,7 @@ plot(yTr(1,:), yTr(2,:), 'LineWidth', Lwidth)
 plot([0], [0], 'kx', 'Markersize', 10)
 
 if saveSwitch==1
-    save(['Output-Data-Files/LB-MS-MPC_', datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
+    save(['../Output-Data-Files/LB-MS-MPC_', datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
 end
 
 
