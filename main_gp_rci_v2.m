@@ -38,7 +38,7 @@ X = Polyhedron('lb',x_min,'ub',x_max);
 U = Polyhedron('lb',u_min,'ub',u_max);
 
 % number of boxes
-Nbox = 3;
+Nbox = 10;
 
 
 %% Learn Guassian process (GP) model
@@ -184,6 +184,7 @@ Wsim = zeros(nw,Nsim);
 What = zeros(nw,Nsim);
 Xsim(:,1) = Cinf(3).V(end,:)';
 
+%{
 for k = 1:Nsim
     % print start
     tic
@@ -259,7 +260,7 @@ end
 figure; hold on;
 Cinf.plot('color','red','linestyle','-','edgecolor','red','linewidth',2)
 Cinf_ob.plot('color','blue','linestyle','-','edgecolor','blue','linewidth',2)
-%{
+
 % confidence regions and realized values of w(x1)
 figure; hold on;
 Delta.plot('alpha',0.5)
@@ -271,7 +272,7 @@ plot(Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
 plot(Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
 scatter(Xsim(1,1:end-1),Wsim(1,:),75,'bo','filled')
 
-
+%{
 % phase plot
 figure; hold on;
 Cinf.plot('color','red','linestyle','-','edgecolor','red','linewidth',2)

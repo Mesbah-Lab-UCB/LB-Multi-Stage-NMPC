@@ -26,7 +26,7 @@ gpSwitch = 1;            % GP correction on/off
 OFswitch = 0;            % Offset-free approach on/off
 TrainOnly = 0;           % Carry out training only (when validating/testing)
 saveSwitch = 0;          % Save outputs on/off
-worstCase = 0;
+worstCase = 1;
 useProj = 0;
 
 
@@ -586,8 +586,14 @@ for k = 1:N
     % specify to use the projection or just the DNN
     if useProj == 1
         fprintf('simulation step %g / %g...', k, N)
-%       uopt(:,1) = explicit_controller([xhati;uopt(:,1)]);
-        uopt(:,1) = CinfProjection(xhati, uopt(:,1), X, U, Cinf, Delta, Delta_X1, sys);
+        if worstCase==0
+    %       uopt(:,1) = explicit_controller([xhati;uopt(:,1)]);
+            uopt(:,1) = CinfProjection(xhati, uopt(:,1), X, U, Cinf, Delta, Delta_X1, sys);
+        else
+           Delta_X1_ob = PolyUnion(Delta_X1).outerApprox();
+           Delta_ob = PolyUnion(Delta).outerApprox();
+           uopt(:,1) = CinfProjection(xhati, uopt(:,1), X, U, Cinf_ob, Delta_ob, Delta_X1_ob, sys); 
+        end
         fprintf('took %g seconds\n', toc)
     else
         uopt(:,1) = uopt(:,1);
