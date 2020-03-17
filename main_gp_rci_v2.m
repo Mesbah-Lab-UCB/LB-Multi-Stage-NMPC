@@ -44,7 +44,7 @@ Nbox = 10;
 %% Learn Guassian process (GP) model
 
 % define model
-ModelOpts.mString = '1-cos(X.*1.5/(pi))';
+ModelOpts.mString = '2-2*cos(X.*1.6/(pi))';
 ModelOpts.isVectorized = true;
 myModel = uq_createModel(ModelOpts);
 
@@ -270,7 +270,7 @@ Yval = uq_evalModel(myModel,Xval);
 plot(Xval,YMeanMat, '--k', 'linewidth', 2);
 plot(Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
 plot(Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
-scatter(Xsim(1,1:end-1),Wsim(1,:),75,'bo','filled')
+% scatter(Xsim(1,1:end-1),Wsim(1,:),75,'bo','filled')
 
 %{
 % phase plot
