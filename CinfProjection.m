@@ -1,5 +1,6 @@
 function uProj = CinfProjection(x, u, X, U, Cinf, Delta, Delta_X1, sys)
 
+tic
 fprintf("\n Projecting to safe set...")
 % Project optimal input onto maximal robust control invariant set
 
@@ -70,6 +71,6 @@ uProj = value(uproject);
 %%
 
 
-fprintf("done \n")
+fprintf("done %6.1f s \n", toc)
 end
 

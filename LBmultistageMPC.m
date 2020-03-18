@@ -25,14 +25,16 @@ Lwidth = 2;
 gpSwitch = 1;            % GP correction on/off
 OFswitch = 0;            % Offset-free approach on/off
 TrainOnly = 0;           % Carry out training only (when validating/testing)
-saveSwitch = 0;          % Save outputs on/off
-worstCase = 1;
-useProj = 0;
+saveSwitch = 1;          % Save outputs on/off
+worstCase = 0;
+useProj = 1;
 
 
 
 %% Load outputs from main_gp_rci_v2.m script
-RCIout = load('constraintSetsM');
+% RCIout = load('constraintSetsM');    %15 boxes
+% RCIout = load('constraintSetsM_20'); %20 boxes
+RCIout = load('constraintSetsM_30'); %30 boxes
 
 % Extract relevant objects
 sys = RCIout.sys;
@@ -58,7 +60,7 @@ E = sys.E;
 %% Learn Guassian process (GP) model
 
 % draw samples
-Xsamp = uq_getSample(myInput,10,'MC');
+Xsamp = uq_getSample(myInput,8,'MC');
 Ysamp = uq_evalModel(myModel, Xsamp);
 
 % train GP
@@ -148,7 +150,7 @@ N = 20;                             % Simulation horizon
 N_robust = 2;                       % Robust horizon for multistage MPC
 
 % Initial point
-yi = [4;0];
+yi = [-10;-4.5];
 
 % Set point(s) and time(s) at which the reference changes
 ysp1 = [10;0];
@@ -403,9 +405,13 @@ for k = 1:N
             
             % Integrate until the end of the interval
             if i<=N_robust
-                [Xk_end, Jstage] = F(Xk, Uk, gpSwitch*sc_vec(i)*(YGP+sdGP),[yss;uss]);
+                [Xk_end, Jstage] = F(Xk, Uk, gpSwitch*(YGP+sc_vec(i)*sdGP),[yss;uss]);
             else
-                [Xk_end, Jstage] = F(Xk, Uk, gpSwitch*YGP,[yss;uss]);
+                if worstCase==0
+                    [Xk_end, Jstage] = F(Xk, Uk, gpSwitch*YGP,[yss;uss]);
+                else
+                    [Xk_end, Jstage] = F(Xk, Uk, [0;0],[yss;uss]);
+                end
             end
                 
 
@@ -644,6 +650,7 @@ end
 % disp(['Total time = ', num2str(Tend)]);
 % disp(['Average time = ', num2str(Tend/N)]);
 
+
 figure(2)
 subplot(2,1,1)
 hold on
@@ -666,9 +673,10 @@ box on
 
 figure(3)
 hold on
-plot(X, 'color', [1, 1, 1]*0.9)
+plot(X, 'color', [1, 1, 1]*0.9, 'LineWidth', Lwidth, 'LineStyle', '--')
 plot(yTr(1,:), yTr(2,:), 'LineWidth', Lwidth)
-plot([0], [0], 'kx', 'Markersize', 10)
+plot(ysp1(1), ysp1(2), 'kx', 'Markersize', 10)
+plot(ysp2(1), ysp2(2), 'kx', 'Markersize', 10)
 
 if saveSwitch==1
     save(['../Output-Data-Files/LB-MS-MPC_', datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
