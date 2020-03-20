@@ -7,7 +7,6 @@ tic
 A = sys.A;
 B = sys.B;
 E = sys.E;
-E = [1;0];
 nx = size(sys.A,2);
 nu = size(sys.B, 2);
 
@@ -44,7 +43,7 @@ Wx.computeHRep;
 
 
 % calculate Pontryagin difference (erosion) for polygons (collection of polytopes)
-EWx = E*Wx;
+EWx = E*sy;
 Cinf_next = (setMinus(X,(EWx)))\((X\Cinf) + (-EWx));
 % Cinf_next = (X-EWx)\((X\Cinf) + (-EWx));
 

@@ -57,6 +57,7 @@ A = sys.A;
 B = sys.B;
 C = eye(2,2);
 E = sys.E;
+E = [1;0];
 
 %% Learn Guassian process (GP) model
 
@@ -692,7 +693,17 @@ plot(ysp1(1), ysp1(2), 'kx', 'Markersize', 10)
 plot(ysp2(1), ysp2(2), 'kx', 'Markersize', 10)
 
 if saveSwitch==1
-    save(['../Output-Data-Files/LB-MS-MPC_', datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
+    if gpSwitch==1 && worstCase==0
+        saveStr = 'SD_';
+    elseif gpSwitch==1 && worstCase==1
+        saveStr = 'WC_';
+    end
+    
+    if useProj==0
+        saveStr2 = 'NoProj_';
+    end
+    
+    save(['../Output-Data-Files/LB-MS-MPC_', saveStr, saveStr2, datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
 end
 
 
