@@ -25,17 +25,17 @@ Lwidth = 2;
 gpSwitch = 1;            % GP correction on/off
 OFswitch = 0;            % Offset-free approach on/off
 TrainOnly = 0;           % Carry out training only (when validating/testing)
-saveSwitch = 0;          % Save outputs on/off
+saveSwitch = 1;          % Save outputs on/off
 worstCase = 0;
-useProj = 0;
+useProj = 1;
 
 
 
 %% Load outputs from main_gp_rci_v2.m script
 % RCIout = load('constraintSetsM_3');    %3 boxes - testing
 % RCIout = load('constraintSetsM');    %15 boxes
-% RCIout = load('constraintSetsM_20'); %20 boxes
-RCIout = load('constraintSetsM_30'); %30 boxes
+RCIout = load('constraintSetsM_20'); %20 boxes
+% RCIout = load('constraintSetsM_30'); %30 boxes
 
 % Extract relevant objects
 sys = RCIout.sys;
@@ -147,7 +147,7 @@ nx = size(Q,1);
 nu = size(R,1);
 
 Np = 4;                             % Prediction horizon
-N = 8;%20;                             % Simulation horizon
+N = 20;                             % Simulation horizon
 N_robust = 2;                       % Robust horizon for multistage MPC
 
 % Initial point
