@@ -39,7 +39,7 @@ X = Polyhedron('lb',x_min,'ub',x_max);
 U = Polyhedron('lb',u_min,'ub',u_max);
 
 % number of boxes
-Nbox = 3;
+Nbox = 20;
 
 
 %% Learn Guassian process (GP) model
