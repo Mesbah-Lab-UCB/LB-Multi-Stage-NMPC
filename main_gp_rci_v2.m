@@ -38,7 +38,7 @@ X = Polyhedron('lb',x_min,'ub',x_max);
 U = Polyhedron('lb',u_min,'ub',u_max);
 
 % number of boxes
-Nbox = 15;
+Nbox = 3;
 
 
 %% Learn Guassian process (GP) model
@@ -77,7 +77,7 @@ for i = 1:Nbox
     Xval = linspace(xL,xU,101)';
     % GP evaluation
     [YMeanMat,YVarMat] = uq_evalModel(myKrigingMat,Xval);
-    points = [Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.05/2) ; Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.05/2)];
+    points = [Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.01/2) ; Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.01/2)];
     % For each region find the convex hull and create a polyhedron object
     K = convhull(points);
     P = Polyhedron('V',points(K,:)); 
@@ -301,5 +301,6 @@ for j=1:size(Cinf,2)
 end
 %}
 
-save('constraintSetsM.mat', 'Cinf', 'Cinf_CH', 'Cinf_ob', 'sys','X', 'U', 'myModel', 'myInput', 'myKrigingMat', 'Delta', 'Delta_X1')
+saveStr = ['constraintSetsM_', num2str(Nbox), '.mat'];
+save(saveStr, 'Cinf', 'Cinf_CH', 'Cinf_ob', 'sys','X', 'U', 'myModel', 'myInput', 'myKrigingMat', 'Delta', 'Delta_X1')
 

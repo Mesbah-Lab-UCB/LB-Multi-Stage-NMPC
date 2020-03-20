@@ -27,15 +27,15 @@ OFswitch = 0;            % Offset-free approach on/off
 TrainOnly = 0;           % Carry out training only (when validating/testing)
 saveSwitch = 0;          % Save outputs on/off
 worstCase = 0;
-useProj = 0;
+useProj = 1;
 
 
 
 %% Load outputs from main_gp_rci_v2.m script
-% RCIout = load('constraintSetsM_3');    %3 boxes - testing
+RCIout = load('constraintSetsM_3');    %3 boxes - testing
 % RCIout = load('constraintSetsM');    %15 boxes
 % RCIout = load('constraintSetsM_20'); %20 boxes
-RCIout = load('constraintSetsM_30'); %30 boxes
+% RCIout = load('constraintSetsM_30'); %30 boxes
 
 % Extract relevant objects
 sys = RCIout.sys;
@@ -147,7 +147,7 @@ nx = size(Q,1);
 nu = size(R,1);
 
 Np = 4;                             % Prediction horizon
-N = 8;%20;                             % Simulation horizon
+N = 20;                             % Simulation horizon
 N_robust = 2;                       % Robust horizon for multistage MPC
 
 % Initial point
@@ -607,11 +607,7 @@ for k = 1:N
            Delta_ob = PolyUnion(Delta).outerApprox();
            uopt(:,1) = CinfProjection(xhati, uopt(:,1), X, U, Cinf_ob, Delta_ob, Delta_X1_ob, sys); 
         end
-        fprintf('\n \n')
-        fprintf('#####################\n')
-        fprintf('took %g seconds \n', toc)
-        fprintf('#####################')
-        fprintf('\n \n')
+        fprintf('took %g seconds\n', toc)
     else
         uopt(:,1) = uopt(:,1);
     end
@@ -687,7 +683,7 @@ hold on
 plot(X, 'color', [1, 1, 1]*0.9, 'LineWidth', Lwidth, 'LineStyle', '--')
 plot(Cinf, 'color', [1, 1, 1]*0.8)
 plot(Cinf_ob, 'color', [1, 1, 1]*0.7)
-plot(yTr(1,:), yTr(2,:), '.-','Markersize', 20, 'LineWidth', Lwidth)
+plot(yTr(1,:), yTr(2,:), 'LineWidth', Lwidth)
 plot(ysp1(1), ysp1(2), 'kx', 'Markersize', 10)
 plot(ysp2(1), ysp2(2), 'kx', 'Markersize', 10)
 

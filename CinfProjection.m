@@ -1,7 +1,7 @@
 function uProj = CinfProjection(x, u, X, U, Cinf, Delta, Delta_X1, sys)
 
 tic
-fprintf("\n Projecting to safe set...")
+% fprintf("\n Projecting to safe set...")
 % Project optimal input onto maximal robust control invariant set
 
 A = sys.A;
@@ -12,7 +12,7 @@ nu = size(sys.B, 2);
 
 
 % Define problem to project into Cinf
-xcurrent = sdpvar(nx,1);
+xcurrent = x;
 uproject = sdpvar(nu,1);
 xnext = A*xcurrent + B*uproject;
 
@@ -45,6 +45,8 @@ Wx.computeHRep;
 % calculate Pontryagin difference (erosion) for polygons (collection of polytopes)
 EWx = E*Wx;
 Cinf_next = (setMinus(X,(EWx)))\((X\Cinf) + (-EWx));
+% Cinf_next = (X-EWx)\((X\Cinf) + (-EWx));
+
 npoly = length(Cinf_next);
 
 
@@ -71,6 +73,6 @@ uProj = value(uproject);
 %%
 
 
-fprintf("done %6.1f s \n", toc)
+% fprintf("done %6.1f s \n", toc)
 end
 
