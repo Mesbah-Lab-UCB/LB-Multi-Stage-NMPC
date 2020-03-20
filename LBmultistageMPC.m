@@ -701,6 +701,8 @@ if saveSwitch==1
     
     if useProj==0
         saveStr2 = 'NoProj_';
+    else
+       saveStr2 = 'YesProj_'; 
     end
     
     save(['../Output-Data-Files/LB-MS-MPC_', saveStr, saveStr2, datestr(now,'YYYY-mm-dd_HH_MM_SS'), ], 'X', 'Cinf', 'Cinf_ob', 'yTr')
