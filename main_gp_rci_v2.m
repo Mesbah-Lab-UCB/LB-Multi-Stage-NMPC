@@ -270,10 +270,10 @@ Xval = linspace(sys.x.min(1),sys.x.max(1),1e3)';
 Yval = uq_evalModel(myModel,Xval);
 [YMeanMat,YVarMat] = uq_evalModel(myKrigingMat,Xval);
 plot(Xval,YMeanMat, '--k', 'linewidth', 2);
-plot(Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
-plot(Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.05/2), '-r', 'linewidth', 2)
-xlabel('x_1')
-ylabel('w(x_1)')
+plot(Xval, YMeanMat+sqrt(YVarMat)*norminv(1-0.01/2), '-r', 'linewidth', 2)
+plot(Xval, YMeanMat-sqrt(YVarMat)*norminv(1-0.01/2), '-r', 'linewidth', 2)
+xlabel('$x_1$', 'Interpreter', 'LaTeX')
+ylabel('$\tilde{w}(x_1)$', 'Interpreter', 'LaTeX')
 set(gca,'FontSize',15)
 box on
 % scatter(Xsim(1,1:end-1),Wsim(1,:),75,'bo','filled')
